@@ -11,15 +11,13 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 
 @Service
 public class GCPTTSGenerator {
 
-    public byte[] getTTSWAV(String text, String voiceName) throws Exception {
+    public byte[] getTTSWAV(String text, String voiceName, String platform) throws Exception {
 
         // Test
         return runStreamingTtsQuickstart(text, voiceName);

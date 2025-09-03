@@ -15,11 +15,15 @@ public class TTSController {
     private TTSGenerator ttsGenerator;
 
     @PostMapping("/v1/convert/wav")
-    public byte[] getTTSWAV(@RequestParam String text, @RequestParam String voiceName) throws Exception {
+    public byte[] getTTSWAV(@RequestParam String text,
+                            @RequestParam String voiceName,
+                            @RequestParam String platform) throws Exception {
 
         System.out.println("text: "+text);
+        System.out.println("voiceName: "+voiceName);
+        System.out.println("platform: "+platform);
 
-        return ttsGenerator.getAllTTSWAV(text, voiceName);
+        return ttsGenerator.getAllTTSWAV(text, voiceName, platform);
     }
 
 }
