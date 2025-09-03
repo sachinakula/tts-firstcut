@@ -1,21 +1,22 @@
 package com.voicegain.service;
 
 import com.voicegain.util.GCPTTSGenerator;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class TTSGenerator {
 
-    private GCPTTSGenerator gcpttsGenerator = new GCPTTSGenerator();
+    @Autowired
+    private GCPTTSGenerator gcpttsGenerator;
 
-    public void getAllTTSWAV(String text, String voiceName) throws Exception {
+//    private GCPTTSGenerator gcpttsGenerator = new GCPTTSGenerator();
+
+    public byte[] getAllTTSWAV(String text, String voiceName) throws Exception {
 
         // Configure list of platform options here like GCP, AWS voice11 etc
 
-
-        gcpttsGenerator.getTTSWAV(text, voiceName);
-
-
+        return gcpttsGenerator.getTTSWAV(text, voiceName);
     }
 
 }
