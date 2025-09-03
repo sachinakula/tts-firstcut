@@ -41,7 +41,7 @@ public class GCPTTSGenerator {
         try (TextToSpeechClient client = TextToSpeechClient.create(settings)) {
 
             // Configure the voice
-            VoiceSelectionParams voice = VoiceSelectionParams.newBuilder().setName("en-US-Chirp3-HD-Charon").setLanguageCode("en-US").build();
+            VoiceSelectionParams voice = VoiceSelectionParams.newBuilder().setName(voiceName).setLanguageCode("en-US").build();
 
             // Configure the streaming request
             StreamingSynthesizeConfig streamingConfig = StreamingSynthesizeConfig.newBuilder().setVoice(voice).build();
