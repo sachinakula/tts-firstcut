@@ -1,0 +1,10 @@
+[
+  {
+    "voice": "en-US-Chirp3-HD-Charon",
+    "platform": "GCP"
+  },
+  {
+    "voice": "test2",
+    "platform": "AWS"
+  }
+]

@@ -17,7 +17,7 @@ import java.util.List;
 @Service
 public class GCPTTSGenerator {
 
-    public byte[] getTTSWAV(String text, String voiceName, String platform) throws Exception {
+    public byte[] getTTSWAV(String text, String voiceName) throws Exception {
 
         // Test
         return runStreamingTtsQuickstart(text, voiceName);
