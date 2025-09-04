@@ -24,3 +24,8 @@ hs_err_pid*
 replay_pid*
 /audiobytes.wav
 /output.wav
+
+build*
+.gradle*
+src/main/resources/ascalon-dev-705e770fdfbc.json
+.idea*
