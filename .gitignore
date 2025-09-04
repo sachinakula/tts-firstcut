@@ -29,3 +29,4 @@ build*
 .gradle*
 src/main/resources/ascalon-dev-705e770fdfbc.json
 .idea*
+/.idea/
