@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.List;
 
@@ -40,6 +41,23 @@ public class TTSGenerator {
             throw new PlatformNotFoundException();
         }
     }
+
+    public void getAllTTSWAVStream(String text, String voiceName, OutputStream outputStream) throws Exception {
+
+        // Configure list of platform options here like GCP, AWS voice11 etc
+
+        String platform = getPlatformByVoice(voiceName);
+
+        if (platform.equalsIgnoreCase("GCP")) {
+
+            gcpttsGenerator.getTTSWAVStream(text, voiceName, outputStream);
+
+        } else {
+            System.out.println("No such platform found !");
+            throw new PlatformNotFoundException();
+        }
+    }
+
 
     public void loadConfigFromFile() {
 // create Object Mapper

@@ -23,6 +23,12 @@ public class GCPTTSGenerator {
         return runStreamingTtsQuickstart(text, voiceName);
     }
 
+    public void getTTSWAVStream(String text, String voiceName, OutputStream outputStream) throws Exception {
+
+        // Test
+        runStreamingTtsQuickstartStream(text, voiceName, outputStream);
+    }
+
 
     public byte[] runStreamingTtsQuickstart(String inputText, String voiceName) throws Exception {
         byte[] audioContent = null;
@@ -85,6 +91,55 @@ public class GCPTTSGenerator {
         }
 
         return audioContent;
+    }
+
+    public void runStreamingTtsQuickstartStream(String inputText, String voiceName, OutputStream outputStream) throws Exception {
+        byte[] audioContent = null;
+
+        // Path to your service account JSON key
+        String jsonPath = "/Users/sachinakula/Downloads/tts-firstcut/src/main/resources/ascalon-dev-705e770fdfbc.json";
+
+        // Load credentials
+        GoogleCredentials credentials = GoogleCredentials.fromStream(new FileInputStream(jsonPath));
+
+        // Attach credentials to client settings
+        TextToSpeechSettings settings = TextToSpeechSettings.newBuilder().setCredentialsProvider(() -> credentials).build();
+
+        try (TextToSpeechClient client = TextToSpeechClient.create(settings)) {
+
+            // Configure the voice
+            VoiceSelectionParams voice = VoiceSelectionParams.newBuilder().setName(voiceName).setLanguageCode("en-US").build();
+
+            // Configure the streaming request
+            StreamingSynthesizeConfig streamingConfig = StreamingSynthesizeConfig.newBuilder().setVoice(voice).build();
+
+            // First request: contains only the config
+            StreamingSynthesizeRequest configRequest = StreamingSynthesizeRequest.newBuilder().setStreamingConfig(streamingConfig).build();
+
+            AudioConfig audioConfig = AudioConfig.newBuilder().setAudioEncoding(AudioEncoding.MP3).build();
+
+            String[] textChunks = {
+                    "Hello there. ",
+                    "How are you ",
+                    "today? It's ",
+                    "such nice weather outside."
+            };
+
+            List<String> inputList = new ArrayList<>();
+            inputList.add(inputText);
+            textChunks = inputList.toArray(new String[0]); // Reading input
+
+            textChunks = new String[1];
+            textChunks[0] = inputText;
+
+            for (String text : textChunks) {
+                SynthesisInput input = SynthesisInput.newBuilder().setText(text).build();
+
+                client.synthesizeSpeech(input, voice, audioConfig).writeTo(outputStream);
+
+                outputStream.flush();
+            }
+        }
     }
 
     public static void writeToFile(byte[] bytes, String pathname, FileOutputStream fos) {
