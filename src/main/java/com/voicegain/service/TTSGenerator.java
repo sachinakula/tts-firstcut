@@ -24,27 +24,7 @@ public class TTSGenerator {
     @Autowired
     private GCPTTSGenerator gcpttsGenerator;
 
-//    private GCPTTSGenerator gcpttsGenerator = new GCPTTSGenerator();
-
-    public byte[] getAllTTSWAV(String text, String voiceName) throws Exception {
-
-        // Configure list of platform options here like GCP, AWS voice11 etc
-
-        String platform = getPlatformByVoice(voiceName);
-
-        if (platform.equalsIgnoreCase("GCP")) {
-
-            return gcpttsGenerator.getTTSWAV(text, voiceName);
-
-        } else {
-            System.out.println("No such platform found !");
-            throw new PlatformNotFoundException();
-        }
-    }
-
     public void getAllTTSWAVStream(String text, String voiceName, OutputStream outputStream) throws Exception {
-
-        // Configure list of platform options here like GCP, AWS voice11 etc
 
         String platform = getPlatformByVoice(voiceName);
 

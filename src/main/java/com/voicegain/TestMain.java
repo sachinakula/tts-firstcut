@@ -9,7 +9,6 @@ public class TestMain {
         TTSGenerator ttsGenerator = new TTSGenerator();
 
         try {
-            ttsGenerator.getAllTTSWAV("Hello", "Test");
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
