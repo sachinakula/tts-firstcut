@@ -73,6 +73,8 @@ public class GCPTTSGenerator {
                 SynthesisInput input = SynthesisInput.newBuilder().setText(text).build();
                 SynthesizeSpeechResponse response = client.synthesizeSpeech(input, voice, audioConfig);
 
+//                response.writeTo();
+
                 audioContent = response.getAudioContent().toByteArray();
 
                 writeToFile(audioContent, pathname, fos);
