@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.voicegain.config.VoiceConfig;
 import com.voicegain.config.VoiceConfigMapping;
 import com.voicegain.errors.PlatformNotFoundException;
+import com.voicegain.errors.VoiceNotFoundException;
 import com.voicegain.util.GCPTTSGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -66,7 +67,15 @@ public class TTSGenerator {
             loadConfigFromFile();
         }
 
-        return voiceConfigMapping.getVoiceConfigMap().get(voiceName).getPlatform();
+        VoiceConfig voiceConfig = voiceConfigMapping.getVoiceConfigMap().get(voiceName);
+
+        if(voiceConfig != null) {
+            return voiceConfig.getPlatform();
+        } else {
+
+            System.out.println("No such voice found.");
+            throw new VoiceNotFoundException();
+        }
     }
 
 }
