@@ -35,4 +35,16 @@ public class GEH {
         out.flush(); // Ensure all buffered data is sent to the client
     }
 
+    @ExceptionHandler(Exception.class)
+    public void handlePlatformNotfound(Exception ex, HttpServletResponse response) throws IOException {
+
+        response.setContentType("application/json");
+        response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+
+        OutputStream out = response.getOutputStream();
+        out.write(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase().getBytes(StandardCharsets.UTF_8));
+        out.flush(); // Ensure all buffered data is sent to the client
+    }
+
+
 }
