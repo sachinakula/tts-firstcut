@@ -4,7 +4,11 @@
     "platform": "GCP"
   },
   {
-    "voice": "test2",
-    "platform": "AWS"
+    "voice": "en-US-Chirp3-HD-Kore",
+    "platform": "GCP"
+  },
+  {
+    "voice": "en-US-Chirp3-HD-Orus",
+    "platform": "GCP"
   }
 ]
