@@ -21,12 +21,20 @@ repositories {
 dependencies {
 //	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 
 	// https://mvnrepository.com/artifact/com.google.cloud/google-cloud-texttospeech
 	implementation("com.google.cloud:google-cloud-texttospeech:2.74.0")
 
 	// https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind
 	implementation("com.fasterxml.jackson.core:jackson-databind:2.20.0")
+
+	// https://mvnrepository.com/artifact/com.h2database/h2
+	implementation("com.h2database:h2:2.3.232")
+
+	// Gradle (build.gradle)
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'

@@ -3,6 +3,10 @@ package com.voicegain.util;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.texttospeech.v1.*;
 import com.google.protobuf.ByteString;
+import com.voicegain.cache.CacheService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.sound.sampled.AudioFileFormat;
@@ -10,12 +14,15 @@ import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
 
 
 @Service
 public class GCPTTSGenerator {
+
+    private static final Logger log = LoggerFactory.getLogger(GCPTTSGenerator.class);
+
+    @Autowired
+    private CacheService cacheService;
 
     public void getTTSWAVStream(String text, String voiceName, OutputStream outputStream) throws Exception {
 
@@ -24,6 +31,15 @@ public class GCPTTSGenerator {
     }
 
     public void runStreamingTtsQuickstartStream(String inputText, String voiceName, OutputStream outputStream) throws Exception {
+
+        String cacheKey = inputText.toLowerCase() + voiceName.toLowerCase();
+
+        if (cacheService.get(cacheKey) != null) {
+            outputStream.write(cacheService.get(cacheKey).toByteArray());
+            outputStream.flush();
+            return;
+        }
+
         byte[] audioContent = null;
 
         // Path to your service account JSON key
@@ -34,6 +50,8 @@ public class GCPTTSGenerator {
 
         // Attach credentials to client settings
         TextToSpeechSettings settings = TextToSpeechSettings.newBuilder().setCredentialsProvider(() -> credentials).build();
+
+        log.info("Calling GCP TTS API for: {}", inputText);
 
         try (TextToSpeechClient client = TextToSpeechClient.create(settings)) {
 
@@ -54,9 +72,22 @@ public class GCPTTSGenerator {
             for (String text : textChunks) {
                 SynthesisInput input = SynthesisInput.newBuilder().setText(text).build();
 
-                client.synthesizeSpeech(input, voice, audioConfig).writeTo(outputStream);
+                OutputStream myOutputStream;
 
-                outputStream.flush();
+                try (ByteArrayOutputStream copyStream = new ByteArrayOutputStream()) {
+
+                    // Create a custom OutputStream that also writes to the copyStream
+                    myOutputStream = new CustomTeeOutputStream(outputStream, copyStream);
+
+                    client.synthesizeSpeech(input, voice, audioConfig).writeTo(myOutputStream);
+
+                    myOutputStream.flush();
+
+                    cacheService.put(cacheKey, copyStream);
+
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
             }
         }
     }
